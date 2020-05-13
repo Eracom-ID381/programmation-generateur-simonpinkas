@@ -2,34 +2,53 @@
 
 // une unité = 1 seconde
 let timer = 1;
-
 function setup() {
-  createCanvas(window.innerWidth, window.innerHeight);
+  smooth();
+  createCanvas(window.innerWidth, window.innerHeight, WEBGL);
   rectMode(CENTER);
 }
 
 function draw() {
-  // Conditionellle nous permettant de savoir si la souris est appuyée 
-  // et si le timer est écoulé
-  if (frameCount % (timer * 60) == 0 && !mouseIsPressed) {
-    // Appel de notre fonction generator
-    generator(width / 2, height / 2, height-150);
+  orbitControl();
+  if (frameCount % (timer * 60) == 0) {
+    drawChair(random(100, 500), random(100, 400), random(100,400), random(100,400), random(0,50));
   }
 }
 
-// Fonction avec quatres paramètres
-function generator(x, y, size) {
-  // fill utilise le paramètre de notre fonction
-  for (let offset = size; offset > 0; offset -= 10) { 
-      fill(random(0,230));
-      rect(x, y, offset, offset);
-      console.log(offset);
-  }
-}
+function drawChair(chairSeatHeight, chairWidth, chairDepth, chairBackHeight, chairFrameThickness) { 
+  background(0);
+  translate(-chairWidth / 2, -chairSeatHeight);
+  rotateX(-PI / 9);
+  rotateY(PI / 8);
+   push();
+   translate(chairWidth / 2, chairBackHeight / 2);
+   box(chairWidth, chairBackHeight, chairFrameThickness);
+   pop();
 
-function mousePressed() { 
-  // Fonction de librairie P5 nous permettant de sauvegarder une image du canvas
-  save();
+   push();
+   translate(chairWidth / 2, chairBackHeight + chairFrameThickness / 2, chairDepth / 2 - chairFrameThickness / 2);
+   box(chairWidth, chairFrameThickness, chairDepth);
+   pop();
+
+   push();
+   translate(chairFrameThickness / 2, chairBackHeight + chairSeatHeight / 2 + chairFrameThickness, 0);
+   box(chairFrameThickness, chairSeatHeight, chairFrameThickness);
+   pop();
+
+   push();
+   translate(chairWidth - chairFrameThickness / 2, chairBackHeight + chairSeatHeight / 2 + chairFrameThickness, 0);
+   box(chairFrameThickness, chairSeatHeight, chairFrameThickness);
+   pop();
+
+   push();
+   translate(chairWidth - chairFrameThickness / 2, chairBackHeight + chairSeatHeight / 2 + chairFrameThickness, chairDepth - chairFrameThickness);
+   box(chairFrameThickness, chairSeatHeight, chairFrameThickness);
+   pop();
+
+   push();
+   translate(chairFrameThickness / 2, chairBackHeight + chairSeatHeight / 2 + chairFrameThickness, chairDepth - chairFrameThickness);
+   box(chairFrameThickness, chairSeatHeight, chairFrameThickness);
+   pop();
 }
 
 function windowResized() { 
